@@ -1,19 +1,17 @@
 # js-image-preview
 Js base image preview tools
 
-This is currently based on jQuery,
-and will remove the dependency in subsequent versions,
-with pure JavaScript
+This is currently based on CSS3 and pure JavaScript
 
 # Usage
 ```js
 $('img').imagePreview();
 // OR
 $('img').imagePreivew({
-  'renderTime': 0.3
+  'animationTime': 300
 });
 ```
 
 ## Options
-- `renderTime`: To specify how many seconds to render the preview
+- `animationTime:300`: To specify how many microseconds to render the preview
 
