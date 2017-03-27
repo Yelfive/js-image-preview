@@ -330,7 +330,6 @@
                 .appendTo($cover);
 
             $imgBox.appendTo($cover).paint();
-            ;
 
             function uniform(property, value) {
                 var names = ['-webkit-', ''], css = {}, name;
@@ -341,7 +340,6 @@
                 return css;
             }
 
-            // $imgBox.get(0).clientHeight;
             $cover.css({'opacity': 1});
             $imgBox.css({'transform': 'scale(1)'});
             // Transform after paint, animate
