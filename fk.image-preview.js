@@ -1,52 +1,13 @@
 /**
- * Created by felix on 16/6/30.
+ * @author Felix Huang <yelfivehuang@gmail.com>
+ *
  * Usage:
- *  $('img').imagePreview();
+ *  fk('img').imagePreview();
  */
 
 "use strict";
 
 (function () {
-    /**
-     * - fn.func
-     * - $('<tag>') Create tag
-     * - $.fn.data
-     * - $.fn.attr
-     * - $.fn.appendTo
-     * - $.fn.css
-     * - $.fn.addClass
-     * - $.fn.prop
-     * - $.fn.text
-     * - $.fn.width
-     * - $.fn.height
-     * - $.fn.extend
-     *
-     */
-    var helper = {
-        image: {
-            img: null,
-            set: function (img) {
-                if (!(img instanceof HTMLImageElement)) {
-                    throw new Error('Param img should be instanceof HTMLImageElement');
-                }
-                this.img = img;
-                return this;
-            },
-            isPortrait: function () {
-                var img = this.img;
-                return img.naturalHeight > img.naturalWidth;
-            },
-            resize: function (size, prop) {
-                var img = this.img;
-                var value = size[prop];
-                if (prop == 'width') {
-                    return img.naturalHeight / img.naturalWidth * value;
-                } else {
-                    return img.naturalWidth / img.naturalHeight * value;
-                }
-            }
-        }
-    };
     var fk = function (selector) {
         if (this === undefined) {
             return new $(selector);
@@ -238,9 +199,10 @@
 
     fk.prototype.imagePreview = function (options) {
         options = $.extend({
-            animationTime: 300
+            animationTime: 300,
+            previewOccupies: 0.9
         }, options || {});
-        
+
         this.css({'cursor': 'zoom-in'});
         this.click(function () {
             var elem = this;
@@ -270,23 +232,23 @@
             var size = {width: 0, height: 0};
             (function () {
                 if (coverSize.width < elem.naturalWidth || coverSize.height < elem.naturalHeight) {
-                    var percent = 0.9;
-                    helper.image.set(elem);
-                    if (helper.image.isPortrait()) {
+                    var percent = options.previewOccupies;
+                    var helper = new ImageHelper(elem);
+                    if (helper.isPortrait()) {
                         size.height = coverSize.height * percent;
-                        size.width = helper.image.resize(size, 'height');
+                        size.width = helper.resize(size, 'height');
                         // when the image is still wider than container
                         if (coverSize.width < size.width) {
                             size.width = coverSize.width * percent;
-                            size.height = helper.image.resize(size, 'width');
+                            size.height = helper.resize(size, 'width');
                         }
                     } else {
                         size.width = coverSize.width * percent;
-                        size.height = helper.image.resize(size, 'width');
+                        size.height = helper.resize(size, 'width');
                         // When the image is still higher than container
                         if (coverSize.height < size.height) {
                             size.height = coverSize.height * percent;
-                            size.width = helper.image.resize(size, 'height');
+                            size.width = helper.resize(size, 'height');
                         }
                     }
                 } else {
@@ -340,10 +302,12 @@
                 return css;
             }
 
+            // Animate
             $cover.css({'opacity': 1});
             $imgBox.css({'transform': 'scale(1)'});
-            // Transform after paint, animate
-            $('body').css({'overflow': 'hidden'});
+            setTimeout(function () {
+                $('body').css({'overflow': 'hidden'});
+            }, options.animationTime);
         });
     };
 
