@@ -21,7 +21,7 @@
                 return [].push.call(this, $dom);
             } else {
                 var $doms = document.querySelectorAll(selector);
-                if (selector.indexOf('#') === 0 && $doms.length === 1) {
+                if (selector.indexOf('#') === 0 && selector.indexOf(' ') == -1 && $doms.length === 1) {
                     $doms = $doms[0];
                 }
                 return [].push.apply(this, $doms);
